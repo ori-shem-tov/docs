@@ -600,18 +600,20 @@ params: account index, application id (top of the stack on opcode entry). Return
 - LogicSigVersion >= 2
 - Mode: Application
 
-params: account index, state key. Return: value. The value is zero if the key does not exist.
+params: account index, state key. Return: value. The value is zero (of type uint64) if the key does not exist.
 
 ## app_local_get_ex
 
 - Opcode: 0x63
 - Pops: *... stack*, {uint64 A}, {uint64 B}, {[]byte C}
 - Pushes: *... stack*, any, uint64
-- read from account specified by Txn.Accounts[A] from local state of the application B key C => {0 or 1 (top), value}
+- read from account specified by Txn.Accounts[A] from local state of the application B key C => \[*... stack*, value, 0
+  or 1\]
 - LogicSigVersion >= 2
 - Mode: Application
 
 params: account index, application id, state key. Return: did_exist flag (top of the stack, 1 if exist and 0 otherwise), value.
+The value is zero (of type uint64) if the key does not exist.
 
 ## app_global_get
 
@@ -622,18 +624,19 @@ params: account index, application id, state key. Return: did_exist flag (top of
 - LogicSigVersion >= 2
 - Mode: Application
 
-params: state key. Return: value. The value is zero if the key does not exist.
+params: state key. Return: value. The value is zero (of type uint64) if the key does not exist.
 
 ## app_global_get_ex
 
 - Opcode: 0x65
 - Pops: *... stack*, {uint64 A}, {[]byte B}
 - Pushes: *... stack*, any, uint64
-- read from application Txn.ForeignApps[A] global state key B => {0 or 1 (top), value}. A is specified as an account index in the ForeignApps field of the ApplicationCall transaction, zero index means this app
+- read from application Txn.ForeignApps[A] global state key B => \[*... stack*, value, 0 or 1\]. A is specified as an account index in the ForeignApps field of the ApplicationCall transaction, zero index means this app
 - LogicSigVersion >= 2
 - Mode: Application
 
-params: application index, state key. Return: value. Application index is
+params: application index, state key. Return: did_exist flag (top of the stack, 1 if exist and 0 otherwise), value.
+The value is zero (of type uint64) if the key does not exist.
 
 ## app_local_put
 
